@@ -19,7 +19,7 @@ namespace Petcord
         public SheetsService SheetService { get; set; }
 
         [Command("help")]
-        public async Task Help()
+        public async Task Help([Remainder] string ignored = "")
         {
             await Context.Channel.TriggerTypingAsync();
             var embed = new EmbedBuilder();
