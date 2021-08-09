@@ -30,7 +30,7 @@ namespace Petcord
                 Console.WriteLine("No config file found, exiting..");
                 Environment.Exit(0);
             }
-            _config = JsonSerializer.Deserialize<ConfigFile>(File.ReadAllText("config2.json"));
+            _config = JsonSerializer.Deserialize<ConfigFile>(File.ReadAllText("config.json"));
 
             // let garbage collector dispose of stream reader
             using var stream = new FileStream(_config.SheetsCredentialsFile, FileMode.Open, FileAccess.Read);
