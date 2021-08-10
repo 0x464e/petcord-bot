@@ -165,17 +165,13 @@ namespace Petcord
 
         [Command("add")]
         [Alias("update")]
+        [RequireAdminRole]
         public async Task AddPlayer()
         {
             try
             {
                 await Context.Channel.TriggerTypingAsync();
 
-                if (Context.User.Id != Config.MaintainerId && !((IGuildUser)Context.User).RoleIds.Contains(Config.AdminRoleId))
-                {
-                    await ReplyAsync(embed: ErrorEmbed("Error", "This command is locked to admins only."));
-                    return;
-                }
                 var embed = new EmbedBuilder();
                 embed.WithAuthor("Update/Add Command", "https://i.imgur.com/PVyDsyp.png")
                     .WithDescription("Updates the specified player's pets, or adds a new player with the specified pets.\n**Usage:**\n`.Add/Update <rsn> <emote(s)>`")
@@ -202,17 +198,12 @@ namespace Petcord
 
         [Command("add")]
         [Alias("update", "add/update")]
+        [RequireAdminRole]
         public async Task AddPlayer([Remainder]string input)
         {
             try
             {
                 await Context.Channel.TriggerTypingAsync();
-
-                if (Context.User.Id != Config.MaintainerId && !((IGuildUser)Context.User).RoleIds.Contains(Config.AdminRoleId))
-                {
-                    await ReplyAsync(embed: ErrorEmbed("Error", "This command is locked to admins only."));
-                    return;
-                }
 
                 var emoteStartIndex = input.IndexOf('<');
                 if (emoteStartIndex < 1)
@@ -315,17 +306,13 @@ namespace Petcord
         }
 
         [Command("remove")]
+        [RequireAdminRole]
         public async Task RemovePlayer()
         {
             try
             {
                 await Context.Channel.TriggerTypingAsync();
 
-                if (Context.User.Id != Config.MaintainerId && !((IGuildUser)Context.User).RoleIds.Contains(Config.AdminRoleId))
-                {
-                    await ReplyAsync(embed: ErrorEmbed("Error", "This command is locked to admins only."));
-                    return;
-                }
                 var embed = new EmbedBuilder();
                 embed.WithAuthor("Update/Add Command", "https://i.imgur.com/PVyDsyp.png")
                     .WithDescription("Updates the specified player's pets, or adds a new player with the specified pets.\n**Usage:**\n`.Add/Update <rsn> <emote(s)>`")
@@ -351,17 +338,12 @@ namespace Petcord
         }
 
         [Command("remove")]
+        [RequireAdminRole]
         public async Task RemovePlayer([Remainder]string input)
         {
             try
             {
                 await Context.Channel.TriggerTypingAsync();
-
-                if (Context.User.Id != Config.MaintainerId && !((IGuildUser)Context.User).RoleIds.Contains(Config.AdminRoleId))
-                {
-                    await ReplyAsync(embed: ErrorEmbed("Error", "This command is locked to admins only."));
-                    return;
-                }
 
                 var emoteStartIndex = input.IndexOf('<');
                 if (emoteStartIndex < 1)

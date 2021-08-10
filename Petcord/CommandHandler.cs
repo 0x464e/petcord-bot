@@ -26,6 +26,7 @@ namespace Petcord
 
             //hook message received event to process for possible commands
             _client.MessageReceived += MessageReceivedAsync;
+            _commandService.CommandExecuted += CommandExecutedAsync;
         }
 
         //initializes all commands
@@ -56,42 +57,20 @@ namespace Petcord
 
             var argPos = 0;
             if (message.HasCharPrefix('.', ref argPos) || message.HasMentionPrefix(_client.CurrentUser, ref argPos))
-            {
-                try
-                {
-                    var result = await _commandService.ExecuteAsync(context, argPos, _services);
-                    if (!result.IsSuccess && result.Error != CommandError.UnknownCommand)
-                        await context.Channel.SendMessageAsync($"Unexpected Error:\n{result.ErrorReason}\n\nI have reported this error to my master.");
-                }
-                catch (Exception e)
-                {
-                    ReportError(e, context);
-                }
-            }
+                await _commandService.ExecuteAsync(context, argPos, _services);
         }
 
-
-        public async void ReportError(Exception e, SocketCommandContext context = null, string extraMsg = null)
+        public async Task CommandExecutedAsync(Optional<CommandInfo> commandInfo, ICommandContext context, IResult result)
         {
-            try
-            {
-                var channel = await _client.GetUser(_config.MaintainerId).CreateDMChannelAsync();
-                var embed = new EmbedBuilder();
-                embed.WithTitle("Error Report");
-                if (context != null)
-                    embed.WithDescription($"Command: \"{context.Message}\"\nUser: {context.User.Username}#{context.User.DiscriminatorValue}\nGuild: {context.Guild.Name} ({context.Guild.Id})\nChannel: {context.Channel.Name} ({context.Channel.Id})");
-                embed.AddField("Message", e.Message)
-                    .AddField("Source", e.Source)
-                    .AddField("Target Site", e.TargetSite)
-                    .AddField("Stack Trace", e.StackTrace);
-                if (extraMsg != null)
-                    embed.AddField("Extra MSG", extraMsg);
-                await channel.SendMessageAsync(string.Empty, embed: embed.Build());
-            }
-            catch
-            {
-                // ignored
-            }
+            // message had the prefix, but there was no command
+            // these are of no interest
+            if (!commandInfo.IsSpecified) return;
+
+            // add and update commands have the custom precondition RequireAdminRole
+            if (result.Error == CommandError.UnmetPrecondition && (commandInfo.Value.Name == "add" || commandInfo.Value.Name == "update"))
+                await context.Channel.SendMessageAsync(embed: ErrorEmbed("Error", "This command is locked to admins only."));
+            else if (!result.IsSuccess)
+                await context.Channel.SendMessageAsync(embed: ErrorEmbed("Error", $"Unexpected error occurred:\n{result.ErrorReason}\n\nI have reported this error to my master."));
         }
     }
 }
