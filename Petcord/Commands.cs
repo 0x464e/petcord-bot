@@ -19,7 +19,7 @@ namespace Petcord
         public SheetsService SheetService { get; set; }
 
         [Command("help")]
-        public async Task Help([Remainder] string ignored = "")
+        public async Task Help([Remainder] string _ = "")
         {
             await Context.Channel.TriggerTypingAsync();
             var embed = new EmbedBuilder();
@@ -213,14 +213,14 @@ namespace Petcord
                     return;
                 }
 
-                var rsn = input.Substring(0, emoteStartIndex).Trim();
+                var rsn = input[..emoteStartIndex].Trim();
                 if (rsn.Length > 12 || !IsAlphaNum(rsn))
                 {
                     await ReplyAsync(embed: ErrorEmbed("Error", $"The player name `{rsn}` is not valid"));
                     return;
                 }
 
-                var matches = Regex.Matches(input.Substring(emoteStartIndex), @"(<:\w+?:\d+?>)");
+                var matches = Regex.Matches(input[emoteStartIndex..], @"(<:\w+?:\d+?>)");
 
                 if (matches.Count == 0)
                 {
@@ -353,14 +353,14 @@ namespace Petcord
                     return;
                 }
 
-                var rsn = input.Substring(0, emoteStartIndex).Trim();
+                var rsn = input[..emoteStartIndex].Trim();
                 if (rsn.Length > 12 || !IsAlphaNum(rsn))
                 {
                     await ReplyAsync(embed: ErrorEmbed("Error", $"The player name `{rsn}` is not valid"));
                     return;
                 }
 
-                var matches = Regex.Matches(input.Substring(emoteStartIndex), @"(<:\w+?:\d+?>)");
+                var matches = Regex.Matches(input[emoteStartIndex..], @"(<:\w+?:\d+?>)");
 
                 if (matches.Count == 0)
                 {
