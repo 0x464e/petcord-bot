@@ -104,6 +104,7 @@ namespace Petcord
             public ulong MaintainerId { get; set; }
             public ulong AdminRoleId { get; set; }
             public ulong GuildId { get; set; }
+            public ulong LeaderboardChannelId { get; set; }
         }
 
     }

@@ -123,6 +123,9 @@ namespace Petcord
             {
                 await Context.Channel.TriggerTypingAsync();
 
+                if (Context.Channel.Id == Config.LeaderboardChannelId)
+                    await Context.Message.DeleteAsync();
+
                 var response = await SheetService.Spreadsheets.Values.Get(Config.SpreadsheetId, $"'Pet Hiscores'!{Config.Top25Range}").ExecuteAsync();
 
                 var ranks = response.Values.Select(x => x[0] + ".");
