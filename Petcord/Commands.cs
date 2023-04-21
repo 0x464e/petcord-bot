@@ -76,7 +76,7 @@ namespace Petcord
                     return;
                 }
 
-                var emotes = new List<string>();
+                var emotes = new List<Emote>();
 
                 for (var i = 1; i <= Config.TotalPetCount; i++)
                     emotes.Add((string) playerPets[i] == "TRUE" ? Config.PetEmotes[i - 1] : Config.DisabledPetEmotes[i - 1]);
@@ -230,9 +230,9 @@ namespace Petcord
                     return;
                 }
 
-                var emotes = new List<string>();
+                var emotes = new List<Emote>();
                 foreach (Match match in matches)
-                    emotes.Add(match.Value);
+                    emotes.Add(Emote.Parse(match.Value));
 
                 emotes = emotes.Distinct().Where(emote => Config.PetEmotes2.Contains(emote) || Config.PetEmotes.Contains(emote)).ToList();
 
@@ -370,9 +370,9 @@ namespace Petcord
                     return;
                 }
 
-                var emotes = new List<string>();
+                var emotes = new List<Emote>();
                 foreach (Match match in matches)
-                    emotes.Add(match.Value);
+                    emotes.Add(Emote.Parse(match.Value));
 
                 emotes = emotes.Distinct().Where(emote => Config.PetEmotes2.Contains(emote) || Config.PetEmotes.Contains(emote)).ToList();
 

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Discord;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Petcord
 {
@@ -59,15 +61,40 @@ namespace Petcord
             public static Color Success = new Color(0x00fc08);
         }
 
+        public class EmoteJsonConverter : JsonConverter<List<Emote>>
+        {
+            public override List<Emote> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+            {
+                var emotes = new List<Emote>();
+                while (reader.Read())
+                {
+                    if (reader.TokenType == JsonTokenType.EndArray)
+                        return emotes;
+
+                    if (reader.TokenType == JsonTokenType.String)
+                        emotes.Add(Emote.Parse(reader.GetString()));
+                }
+                
+                throw new JsonException("Unexpected end of JSON input");
+            }
+
+            public override void Write(Utf8JsonWriter writer, List<Emote> value, JsonSerializerOptions options) => throw new NotImplementedException();
+        }
+
         public class ConfigFile
         {
             public string ApplicationName { get; set; }
             public string SpreadsheetId { get; set; }
             public string SheetsCredentialsFile { get; set; }
             public string BotToken { get; set; }
-            public List<string> PetEmotes { get; set; }
-            public List<string> PetEmotes2 { get; set; }
-            public List<string> DisabledPetEmotes { get; set; }
+            
+            [JsonConverter(typeof(EmoteJsonConverter))]
+            public List<Emote> PetEmotes { get; set; }
+            [JsonConverter(typeof(EmoteJsonConverter))]
+            public List<Emote> PetEmotes2 { get; set; }
+            [JsonConverter(typeof(EmoteJsonConverter))]
+            public List<Emote> DisabledPetEmotes { get; set; }
+            
             public string PetHiscoresRange { get; set; }
             public string PlayersPetsStartCell { get; set; }
             public string PlayersPetsEndColumn { get; set; }
