@@ -27,7 +27,7 @@ namespace Petcord
                 .WithDescription("Hi, I'm a Discord bot for using the [Petcord Google Sheet](https://docs.google.com/spreadsheets/u/8/d/e/2PACX-1vQnNBDpAt7M7jcDyrgvKP3DoJ80pySN4tmehMG4xjVBsJoyQV_wyIpBSrfdr5Lgb4RT3vHRZsZRQhLI/pubhtml#)." +
                                  "\nYou can see the list of available commands below:\n\n" +
                                  "**.Pets**\nList the specified player's pet statistics\n\n" +
-                                 "**.Top25**\nPrints the current top 25 pet hunters\n⠀")
+                                 "**.Top100**\nPrints the current top 100 pet hunters\n⠀")
                 .WithFooter("Made By Meow 🐈/Ox#0254", "https://i.imgur.com/NQPxaFO.png")
                 .WithThumbnailUrl("https://i.imgur.com/jAyyowq.png")
                 .WithColor(RandomDiscordColor());
@@ -71,7 +71,7 @@ namespace Petcord
 
                 if (playerPets == null)
                 {
-                    await ReplyAsync(embed: ErrorEmbed("Error", "Only Pet Hunters with 20+ pets are eligible for the hiscores.\n" +
+                    await ReplyAsync(embed: ErrorEmbed("Error", "Player not found from the pet hiscores.\n" +
                                                                 "See <#801585244481388564> for more info"));
                     return;
                 }
@@ -115,9 +115,9 @@ namespace Petcord
             }
         }
 
-        [Command("top25")]
-        [Alias("top 25")]
-        public async Task Top25()
+        [Command("top100")]
+        [Alias("top 100", "top25","top 25")]
+        public async Task Top100()
         {
             try
             {
@@ -144,7 +144,7 @@ namespace Petcord
                 table += "```";
 
                 var embed = new EmbedBuilder();
-                embed.WithAuthor("Top 25 Pet Hunters", "https://i.imgur.com/LrrbHpD.png")
+                embed.WithAuthor("Top 100 Pet Hunters", "https://i.imgur.com/LrrbHpD.png")
                     .WithDescription(table)
                     .WithColor(RandomDiscordColor());
                 await ReplyAsync(embed: embed.Build());
