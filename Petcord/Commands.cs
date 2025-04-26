@@ -64,10 +64,10 @@ namespace Petcord
                 }
 
                 var statsResponse = await SheetService.Spreadsheets.Values.Get(Config.SpreadsheetId, $"'Pet Hiscores'!{Config.PetHiscoresRange}").ExecuteAsync();
-                var playerStats = statsResponse.Values.FirstOrDefault(x => x.Count > 2 && ((string)x[2]).Equals(rsn, StringComparison.InvariantCultureIgnoreCase));
+                var playerStats = statsResponse.Values.FirstOrDefault(x => x.Count > 2 && ((string)x.ElementAtOrDefault(2) ?? "").Equals(rsn, StringComparison.InvariantCultureIgnoreCase));
 
                 var petsResponse = await SheetService.Spreadsheets.Values.Get(Config.SpreadsheetId, $"'Players Pets'!{Config.PlayersPetsStartCell}:{Config.PlayersPetsEndColumn}").ExecuteAsync();
-                var playerPets = petsResponse.Values.FirstOrDefault(x => ((string)x[0]).Equals(rsn, StringComparison.InvariantCultureIgnoreCase));
+                var playerPets = petsResponse.Values.FirstOrDefault(x => ((string)x.ElementAtOrDefault(0) ?? "").Equals(rsn, StringComparison.InvariantCultureIgnoreCase));
 
                 if (playerPets == null)
                 {
