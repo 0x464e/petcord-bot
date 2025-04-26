@@ -79,7 +79,7 @@ namespace Petcord
                 var emotes = new List<Emote>();
 
                 for (var i = 1; i <= Config.TotalPetCount; i++)
-                    emotes.Add((string) playerPets[i] == "TRUE" ? Config.PetEmotes[i - 1] : Config.DisabledPetEmotes[i - 1]);
+                    emotes.Add((string)playerPets[i] == "TRUE" ? Config.PetEmotes[i - 1] : Config.DisabledPetEmotes[i - 1]);
 
                 playerStats ??= new List<object> { null, null, null, null, null, null };
                 var rank = (string)playerStats[1];
@@ -116,7 +116,7 @@ namespace Petcord
         }
 
         [Command("top100")]
-        [Alias("top 100", "top25","top 25")]
+        [Alias("top 100", "top25", "top 25")]
         public async Task Top100()
         {
             try
@@ -151,7 +151,6 @@ namespace Petcord
                     .WithDescription(table)
                     .WithColor(RandomDiscordColor());
                 await ReplyAsync(embed: embed.Build());
-
             }
             catch (Exception e)
             {
@@ -203,7 +202,7 @@ namespace Petcord
         [Command("add")]
         [Alias("update", "add/update")]
         [RequireAdminRole]
-        public async Task AddPlayer([Remainder]string input)
+        public async Task AddPlayer([Remainder] string input)
         {
             try
             {
@@ -262,7 +261,7 @@ namespace Petcord
                         var rowNumber = playerCountResponse.Values.Count + 2;
                         updateRange.AddRange(Config.PetEmotes.Select((t, i) => emotes.Contains(t) || emotes.Contains(Config.PetEmotes2[i]) ? "TRUE" : "FALSE"));
 
-                        var updateRequest = SheetService.Spreadsheets.Values.Update(new ValueRange { Values = new IList<object>[] { updateRange } }, Config.SpreadsheetId, $"'Players Pets'!A{rowNumber}:{Config.PlayersPetsEndColumn}{rowNumber}");
+                        var updateRequest = SheetService.Spreadsheets.Values.Update(new ValueRange { Values = [updateRange] }, Config.SpreadsheetId, $"'Players Pets'!A{rowNumber}:{Config.PlayersPetsEndColumn}{rowNumber}");
                         updateRequest.ValueInputOption = SpreadsheetsResource.ValuesResource.UpdateRequest.ValueInputOptionEnum.USERENTERED;
                         updateRequest.Execute();
 
@@ -279,7 +278,7 @@ namespace Petcord
                         var rowNumber = playerCountResponse.Values.IndexOf(column) + 2;
                         updateRange.AddRange(Config.PetEmotes.Select((t, i) => emotes.Contains(t) || emotes.Contains(Config.PetEmotes2[i]) ? "TRUE" : null));
 
-                        var updateRequest = SheetService.Spreadsheets.Values.Update(new ValueRange { Values = new IList<object>[] { updateRange } }, Config.SpreadsheetId, $"'Players Pets'!A{rowNumber}:{Config.PlayersPetsEndColumn}{rowNumber}");
+                        var updateRequest = SheetService.Spreadsheets.Values.Update(new ValueRange { Values = [updateRange] }, Config.SpreadsheetId, $"'Players Pets'!A{rowNumber}:{Config.PlayersPetsEndColumn}{rowNumber}");
                         updateRequest.ValueInputOption = SpreadsheetsResource.ValuesResource.UpdateRequest.ValueInputOptionEnum.USERENTERED;
                         updateRequest.Execute();
 
@@ -343,7 +342,7 @@ namespace Petcord
 
         [Command("remove")]
         [RequireAdminRole]
-        public async Task RemovePlayer([Remainder]string input)
+        public async Task RemovePlayer([Remainder] string input)
         {
             try
             {
@@ -402,7 +401,7 @@ namespace Petcord
                         var rowNumber = playerCountResponse.Values.IndexOf(column) + 2;
                         updateRange.AddRange(Config.PetEmotes.Select((t, i) => emotes.Contains(t) || emotes.Contains(Config.PetEmotes2[i]) ? "FALSE" : null));
 
-                        var updateRequest = SheetService.Spreadsheets.Values.Update(new ValueRange { Values = new IList<object>[] { updateRange } }, Config.SpreadsheetId, $"'Players Pets'!A{rowNumber}:{Config.PlayersPetsEndColumn}{rowNumber}");
+                        var updateRequest = SheetService.Spreadsheets.Values.Update(new ValueRange { Values = [updateRange] }, Config.SpreadsheetId, $"'Players Pets'!A{rowNumber}:{Config.PlayersPetsEndColumn}{rowNumber}");
                         updateRequest.ValueInputOption = SpreadsheetsResource.ValuesResource.UpdateRequest.ValueInputOptionEnum.USERENTERED;
                         updateRequest.Execute();
 
@@ -437,7 +436,7 @@ namespace Petcord
         }
 
 
-        public async void ReportError(Exception e, SocketCommandContext context, string extraMsg = null)
+        private async Task ReportError(Exception e, SocketCommandContext context, string extraMsg = null)
         {
             try
             {
@@ -460,4 +459,3 @@ namespace Petcord
         }
     }
 }
-

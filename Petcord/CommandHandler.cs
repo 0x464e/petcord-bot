@@ -9,7 +9,7 @@ using static Petcord.Functions;
 
 namespace Petcord
 {
-    class CommandHandler
+    internal class CommandHandler
     {
         private readonly DiscordSocketClient _client;
         private readonly CommandService _commandService;
@@ -35,10 +35,10 @@ namespace Petcord
             await _commandService.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
         }
 
-        public async Task MessageReceivedAsync(SocketMessage s)
+        private async Task MessageReceivedAsync(SocketMessage s)
         {
             // ignore system messages and messages from bot/webhook users
-            if (!(s is SocketUserMessage { Source: MessageSource.User } message)) return;
+            if (s is not SocketUserMessage { Source: MessageSource.User } message) return;
 
             var context = new SocketCommandContext(_client, message);
             try
@@ -60,7 +60,7 @@ namespace Petcord
                 await _commandService.ExecuteAsync(context, argPos, _services);
         }
 
-        public async Task CommandExecutedAsync(Optional<CommandInfo> commandInfo, ICommandContext context, IResult result)
+        private static async Task CommandExecutedAsync(Optional<CommandInfo> commandInfo, ICommandContext context, IResult result)
         {
             // message had the prefix, but there was no command
             // these are of no interest

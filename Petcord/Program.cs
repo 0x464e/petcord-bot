@@ -15,7 +15,7 @@ using static Petcord.Functions;
 
 namespace Petcord
 {
-    class Program
+    internal class Program
     {
         private readonly ConfigFile _config;
         private readonly SheetsService _sheetService;
@@ -23,7 +23,7 @@ namespace Petcord
         private static void Main()
             => new Program().RunAsync().GetAwaiter().GetResult();
 
-        public Program()
+        private Program()
         {
             if (!File.Exists("config.json"))
             {
@@ -73,7 +73,10 @@ namespace Petcord
             return new ServiceCollection()
                 .AddSingleton(_config)
                 .AddSingleton(_sheetService)
-                .AddSingleton<DiscordSocketClient>()
+                .AddSingleton(new DiscordSocketClient(new DiscordSocketConfig()
+                {
+                    GatewayIntents = GatewayIntents.AllUnprivileged | GatewayIntents.MessageContent
+                }))
                 .AddSingleton(new CommandService(new CommandServiceConfig
                 {
                     DefaultRunMode = RunMode.Async,

@@ -11,13 +11,13 @@ namespace Petcord
     //some static helper functions and variables
     public static class Functions
     {
-        public static Random Random = new Random();
-        public static IFormatProvider NumberStringFormat = new CultureInfo("en-US");
+        private static Random Random = new();
+        public static readonly IFormatProvider NumberStringFormat = new CultureInfo("en-US");
 
         //static object for all command instances
         //used to lock access at certain times to not make concurrently running
         //commands break each other's functionality
-        public static object Locker = new object();
+        public static readonly object Locker = new();
 
         public static bool IsAlphaNum(string str)
         {
@@ -55,10 +55,10 @@ namespace Petcord
             return new Color(Random.Next(256), Random.Next(256), Random.Next(256));
         }
 
-        internal class Colors
+        internal abstract class Colors
         {
-            public static Color Error = new Color(0xff0000);
-            public static Color Success = new Color(0x00fc08);
+            public static readonly Color Error = new Color(0xff0000);
+            public static readonly Color Success = new Color(0x00fc08);
         }
 
         public class EmoteJsonConverter : JsonConverter<List<Emote>>
@@ -83,28 +83,28 @@ namespace Petcord
 
         public class ConfigFile
         {
-            public string ApplicationName { get; set; }
-            public string SpreadsheetId { get; set; }
-            public string SheetsCredentialsFile { get; set; }
-            public string BotToken { get; set; }
+            public string ApplicationName { get; init; }
+            public string SpreadsheetId { get; init; }
+            public string SheetsCredentialsFile { get; init; }
+            public string BotToken { get; init; }
             
             [JsonConverter(typeof(EmoteJsonConverter))]
-            public List<Emote> PetEmotes { get; set; }
+            public List<Emote> PetEmotes { get; init; }
             [JsonConverter(typeof(EmoteJsonConverter))]
-            public List<Emote> PetEmotes2 { get; set; }
+            public List<Emote> PetEmotes2 { get; init; }
             [JsonConverter(typeof(EmoteJsonConverter))]
-            public List<Emote> DisabledPetEmotes { get; set; }
+            public List<Emote> DisabledPetEmotes { get; init; }
             
-            public string PetHiscoresRange { get; set; }
-            public string PlayersPetsStartCell { get; set; }
-            public string PlayersPetsEndColumn { get; set; }
-            public string Top25Range { get; set; }
-            public string PlayerCountRange { get; set; }
-            public int TotalPetCount { get; set; }
-            public ulong MaintainerId { get; set; }
-            public ulong AdminRoleId { get; set; }
-            public ulong GuildId { get; set; }
-            public ulong LeaderboardChannelId { get; set; }
+            public string PetHiscoresRange { get; init; }
+            public string PlayersPetsStartCell { get; init; }
+            public string PlayersPetsEndColumn { get; init; }
+            public string Top25Range { get; init; }
+            public string PlayerCountRange { get; init; }
+            public int TotalPetCount { get; init; }
+            public ulong MaintainerId { get; init; }
+            public ulong AdminRoleId { get; init; }
+            public ulong GuildId { get; init; }
+            public ulong LeaderboardChannelId { get; init; }
         }
 
     }
